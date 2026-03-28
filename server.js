@@ -16,7 +16,27 @@ connectCloudinary()
 
 // middlewares
  app.use(express.json())
- app.use(cors())
+  //app.use(cors())
+  //testing puerose.............
+  app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200); // 🔥 THIS LINE FIXES YOUR ERROR
+  }
+
+  next();
+});
+
+
+
 
 
 
@@ -26,7 +46,7 @@ connectCloudinary()
  app.use("/api/user", userRouter)
 app.use("/api/admin", adminRouter)
  // localhost:4000/api/admin
-app.use("/api/doctor", doctorRouter)
+app.use("/api/doctor", doctorRouter) 
 
 app.get("/", (req, res) => {
   res.send("API Working")
